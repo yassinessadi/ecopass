@@ -12,8 +12,7 @@ import pandas as pd
 from rich.console import Console
 from rich.table import Table
 
-# from ecopass.core.record_header import RecordHeader
-from ecopass.core.record_header_v_1 import RecordHeader
+from ecopass.core.record_header import RecordHeader
 
 
 # -------------------------------------------------

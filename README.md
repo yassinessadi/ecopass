@@ -34,7 +34,4 @@ If you find a bug, have a feature request, or want to improve the project, feel 
 - **Submit a pull request**
 - **Report issues on [GitHub](https://github.com/yassinessadi/ecopass/issues)**  
 
-Your contributions help improve the project and benefit the community! 🚀  
-```
-
-This makes it clear that contributions are encouraged. Let me know if you want any more improvements! 🚀🔥
+Your contributions help improve the project and benefit the community! 🚀
