@@ -1,3 +1,6 @@
+Here’s your updated `README.md` with the installation and usage instructions:  
+
+```md
 # Ecopass
 
 ## Project Description
@@ -9,3 +12,18 @@ You can install **Ecopass** from PyPI using:
 
 ```bash
 pip install ecopass
+```
+
+## Usage
+
+To see the help menu:
+
+```bash
+ecopass -h
+```
+
+To run the script with input and output parameters:
+
+```bash
+ecopass --input file.bin --output out_dir --batch-size 10000
+```
