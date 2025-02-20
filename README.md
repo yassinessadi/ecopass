@@ -1,6 +1,3 @@
-Here’s your updated `README.md` with the installation and usage instructions:  
-
-```md
 # Ecopass
 
 ## Project Description
@@ -27,3 +24,17 @@ To run the script with input and output parameters:
 ```bash
 ecopass --input file.bin --output out_dir --batch-size 10000
 ```
+
+## Help & Contribution
+
+This project is open-source, and contributions are welcome!  
+If you find a bug, have a feature request, or want to improve the project, feel free to contribute.  
+
+- **Fork the repository**
+- **Submit a pull request**
+- **Report issues on [GitHub](https://github.com/yassinessadi/ecopass/issues)**  
+
+Your contributions help improve the project and benefit the community! 🚀  
+```
+
+This makes it clear that contributions are encouraged. Let me know if you want any more improvements! 🚀🔥
