@@ -22,13 +22,19 @@ import mmap
 from typing import Tuple
 
 class RecordType(enum.Enum):
-    SYSTEM_RECORD = 1
-    DELETED_RECORD = 2
-    SYSTEM_RESERVED = 3
-    NORMAL_USER_DATA = 4
-    POINTER_RECORD = 6
-    USER_DATA_RECORD = 7
-    RESERVED_FOR_FUTURE_USE = 9
+    SYSTEM_RECORD_DUPLICATE = 1  # A system record (duplicate occurrence)
+    DELETED_RECORD = 2  # Deleted record (available for reuse)
+    SYSTEM_RESERVED = 3  # System record
+    NORMAL_USER_DATA = 4  # Normal user data record
+    REDUCED_USER_DATA = 5  # Reduced user data record (indexed files only)
+    POINTER_RECORD = 6  # Pointer record (indexed files only)
+    USER_DATA_RECORD = 7  # User data record referenced by a pointer
+    REDUCED_USER_DATA_REFERENCED_BY_POINTER = 8  # Reduced user data record referenced by a pointer
+    RESERVED_FOR_FUTURE_USE = 9  # Reserved for future use
+    MID_TRANSACTION_USER_RECORD = 10  # Mid-transaction user data record
+    MID_TRANSACTION_REDUCED_USER_RECORD = 11  # Mid-transaction reduced user data record
+    MID_TRANSACTION_USER_RECORD_REFERENCED = 12  # Mid-transaction user record referenced by a pointer
+    MID_TRANSACTION_REDUCED_USER_RECORD_REFERENCED = 13  # Mid-transaction reduced user record referenced by a pointer
     
 
 class RecordHeader():
@@ -56,8 +62,13 @@ class RecordHeader():
             RecordType.SYSTEM_RESERVED.value,
             RecordType.USER_DATA_RECORD.value,
             RecordType.RESERVED_FOR_FUTURE_USE.value,
-            RecordType.SYSTEM_RECORD.value,
+            RecordType.SYSTEM_RECORD_DUPLICATE.value,
             RecordType.POINTER_RECORD.value,
+            RecordType.REDUCED_USER_DATA.value,
+            RecordType.MID_TRANSACTION_USER_RECORD.value,
+            RecordType.MID_TRANSACTION_REDUCED_USER_RECORD.value,
+            RecordType.MID_TRANSACTION_USER_RECORD_REFERENCED.value,
+            RecordType.MID_TRANSACTION_REDUCED_USER_RECORD_REFERENCED.value,
         ]
         self.alignment = alignment
         self.file = None        # Will be set in __enter__
@@ -156,7 +167,9 @@ class RecordHeader():
         try:
             f = self.mmap_obj
             while True:
+                #-------------------------------------------------------------------
                 # Read the 2-byte or 4-byte header
+                #-------------------------------------------------------------------
                 pos = f.tell()
                 header = f.read(self.header_size)
 
@@ -174,7 +187,7 @@ class RecordHeader():
                         print("[DEBUG] Reached end of file (incomplete header)")
                         print("--------------------------------")
                     break  # End of file
-                
+
                 status, length = self._parse_header(header)
 
                 #-------------------------------------------------------------------
@@ -191,14 +204,18 @@ class RecordHeader():
                 # used as a example to stop the iteration
                 #-------------------------------------------------------------------------------------
                 # if header == b'@k' or header == b'@L':
-                #     break
+                #     breakSS
 
                 #-------------------------------------------------------------------------------------
                 # enable debug mode only for simple test since will print a lot of data in the console
                 #-------------------------------------------------------------------------------------
-                if self.debug:
-                    print(f"[DEBUG] Parsed -> status={status}, length={length}")
-                    print(f"[DEBUG] Expected data length: {length} bytes")
+                if status in self.allowed_statuses:
+                    if self.debug:
+                        print("--------------------------------")
+                        print(f"[DEBUG] Parsed -> status={status}, length={length}")
+                        print(f"[DEBUG] Record type: {RecordType(status).name}")
+                        print(f"[DEBUG] Expected data length: {length} bytes")
+                        print("--------------------------------")
 
                 #-------------------------------------------------------------------------------------  
                 # Read the record data
