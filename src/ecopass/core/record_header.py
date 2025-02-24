@@ -35,7 +35,7 @@ class RecordType(enum.Enum):
     MID_TRANSACTION_REDUCED_USER_RECORD = 11  # Mid-transaction reduced user data record
     MID_TRANSACTION_USER_RECORD_REFERENCED = 12  # Mid-transaction user record referenced by a pointer
     MID_TRANSACTION_REDUCED_USER_RECORD_REFERENCED = 13  # Mid-transaction reduced user record referenced by a pointer
-    
+
 
 class RecordHeader():
     """
@@ -59,6 +59,7 @@ class RecordHeader():
         # -------------------------------------------------------------------------------------------------------------
         self.allowed_statuses = [
             RecordType.NORMAL_USER_DATA.value,
+            RecordType.DELETED_RECORD.value,
             RecordType.SYSTEM_RESERVED.value,
             RecordType.USER_DATA_RECORD.value,
             RecordType.RESERVED_FOR_FUTURE_USE.value,
@@ -81,7 +82,13 @@ class RecordHeader():
     #--------------------------------------------
     def __enter__(self):
         """Opens the file and creates a memory map for it."""
+        # --------------------------------------------      
+        # open the file
+        # --------------------------------------------
         self.file = open(self.filename, 'rb')
+        # --------------------------------------------
+        # create a memory map for the file
+        # --------------------------------------------
         self.mmap_obj = mmap.mmap(self.file.fileno(), length=0, access=mmap.ACCESS_READ)
         return self
 
@@ -135,7 +142,7 @@ class RecordHeader():
         # --------------------------------------------
         # if length % 2 != 0:
         #     f.seek(1, 1)
-
+        # --------------------------------------------
         total_header_data = self.header_size + length
         padding_size = (self.alignment - (total_header_data % self.alignment)) % self.alignment
         return padding_size
@@ -204,8 +211,8 @@ class RecordHeader():
                 # used as a example to stop the iteration
                 #-------------------------------------------------------------------------------------
                 # if header == b'@k' or header == b'@L':
-                #     breakSS
-
+                #     break
+                
                 #-------------------------------------------------------------------------------------
                 # enable debug mode only for simple test since will print a lot of data in the console
                 #-------------------------------------------------------------------------------------
