@@ -188,7 +188,6 @@ class RecordHeader():
                 if len(header) < self.header_size:
                     if self.debug:
                         print("--------------------------------")
-                        print(f"remaining bytes: {f.read(100).hex()}")
                         print(f"header len: {len(header)}, expected header size: {self.header_size}")
                         print(f"\n[DEBUG] Reading header at position {pos}: bytes={header.hex()}")
                         print("[DEBUG] Reached end of file (incomplete header)")
@@ -202,13 +201,13 @@ class RecordHeader():
                 #-------------------------------------------------------------------
                 if status not in self.allowed_statuses:
                     if self.debug:
-                        print(f"remaining bytes: {f.read(self.header_size)}")
                         print("--------------------------------")
                         print(f"[DEBUG] Invalid status: {status}")
                         print("--------------------------------")
                 
                 #-------------------------------------------------------------------------------------
                 # used as a example to stop the iteration
+                # base on the header we can stop the iteration using the header value from your file
                 #-------------------------------------------------------------------------------------
                 # if header == b'@k' or header == b'@L':
                 #     break
