@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "ecopass"
+version = "0.1.15"
+description = "This script specifically handles microfile headers sequentially."
+authors = ["yassinessadi <yasine.esadi@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "ecopass", from = "src" }]
+repository = "https://github.com/yassinessadi/ecopass"
+homepage = "https://pypi.org/project/ecopass/"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "1.4.2"
+pyarrow = "14.0.1"
+click = ">=8.1.8,<9.0.0"
+psutil = ">=7.0.0,<8.0.0"
+rich = ">=13.9.4,<14.0.0"
+
+
+[tool.poetry.scripts]
+ecopass = "ecopass.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
